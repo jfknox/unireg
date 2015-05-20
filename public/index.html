@@ -2,15 +2,145 @@
 <html>
   <head>
     <title>Uniregistry</title>
-    <script src="../dependencies/react.min.js"></script>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="../dependencies/bootstrap.min.css" />
+    <script src="../dependencies/react.js"></script>
     <script src="../dependencies/JSXTransformer.js"></script>
     <script src="../dependencies/jquery.min.js"></script>
+    <script src="../dependencies/underscore-min.js"></script>
 
   </head>
   <body>
-    <div id="content"></div>
-    <script type="text/javascript" src="scripts.js"></script>
-  </body>
-   <link rel="stylesheet" href="base.css" />
-   <link rel="stylesheet" href="../dependencies/bootstrap.min.css" />
+ 
+
+
+
+    <div id="container">
+        <!-- This element's contents will be replaced with your component. -->
+    </div>
+    
+
+
+    <script type="text/jsx">
+      
+      var data = { "domains": [{
+          "id": 1,
+          "domain": "foodfighters.lol",
+          "price": 1200, 
+          "registrant_email": "john.smith@email.com"
+        }, {
+          "id": 2,
+          "domain": "greendiamondsky.com",
+          "price": 900, 
+          "registrant_email": "admin@dealdomainer.com"
+        }, {
+          "id": 1,
+          "domain": "selfdriving.cars",
+          "price": 1600, 
+          "registrant_email": "carl.sagan@aimotors.com"
+        }]
+      }
+
+
+      var DomainTable = React.createClass({
+        render: function() {
+          var RowList = _.map(this.props.data.domains, function (domainObject) {
+            return (
+              <Row domain={domainObject.domain} price={domainObject.price} email={domainObject.registrant_email}> 
+              </Row>
+            );
+          });
+          return (
+            <div className="domanTable">
+              <h1>Table</h1>
+              <table>
+                <tr>
+                  <th>Domain Name</th>
+                  <th>Uniregistry</th> 
+                  <th>Price</th>
+                </tr>
+                {RowList}
+              </table>
+            </div>
+          );
+        }
+      });
+
+      var Row = React.createClass({
+        editModal: function() {
+          React.render(
+            <DomainDetail email={this.props.email} domain={this.props.domain} price={this.props.price} />,
+            document.getElementById('container')
+          );
+        },
+        render: function() {
+        function endsWith(string, suffix) {
+          return string.indexOf(suffix, string.length - suffix.length) !== -1;
+        }
+        var check = ""
+        if (endsWith(this.props.domain, ".lol") || endsWith(this.props.domain, ".cars")){
+          check = "yes"
+        }
+          return (
+            <tr>
+              <td onClick={this.editModal}> {this.props.domain}</td>
+              <td> {check} </td>
+              <td> ${(this.props.price/100).toFixed(2)}</td>
+            </tr>
+          );
+        }
+      });
+
+      var DomainDetail = React.createClass({
+        getInitialState: function() {
+          return {domain: this.props.domain, email: this.props.email, price: this.props.price};
+        },
+        handleChange: function(event) {
+            var data = {}
+            data[event.target.name] = event.target.value
+            this.setState(data);
+
+        },
+
+        render: function () {
+
+          return(
+            <div>
+              <form>
+                Domain name
+                <input type="text" name="domain" value={this.state.domain} onChange={this.handleChange}/>
+                <br/>
+                Registration Email
+                <input type="text" name="email" value={this.state.email} onChange={this.handleChange}/>
+                <br/>
+                Price
+                <input type="text" name="price" value={this.state.price} onChange={this.handleChange}/>
+                
+
+                <br/>
+
+                <input type="submit" value="Save Changes"/>
+              </form>
+            </div>
+          )
+        }
+ 
+      })
+
+
+
+      React.render(
+        <DomainTable data={data} />,
+        document.getElementById('container')
+      );
+
+
+
+
+
+
+    </script>
+
+  </body>  
+
 </html>

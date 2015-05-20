@@ -2,14 +2,17 @@
     "domains": [{
         "id": 1,
         "domain": "foodfighters.lol",
-        "price": 1200
+        "price": 1200, 
+        "registrant_email": "john.smith@email.com"
     }, {
         "id": 2,
         "domain": "greendiamondsky.com",
-        "price": 900
+        "price": 900, 
+        "registrant_email": "admin@dealdomainer.com"
     }, {
         "id": 1,
         "domain": "selfdriving.cars",
-        "price": 1600
+        "price": 1600, 
+        "registrant_email": "carl.sagan@aimotors.com"
     }]
 }
