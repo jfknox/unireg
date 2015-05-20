@@ -1,1 +1,67 @@
-base.css
+.save-button {
+	
+	border: none;
+	border-radius: 0px;
+	background-color: rgb(58, 123, 69);
+	color: white;
+	padding: 5px 10px 7px 10px;
+	font-size: 11px;
+	font-weight: 200;
+}
+
+.save-button:hover {
+
+	color: rgb(58, 123, 69);
+}
+
+.domainTable {
+	padding: 25px 20px 15px 20px;
+	border: 1px solid black;
+}
+
+.domainForm {
+	padding: 15px 25px 10px 15px;
+	border: 1px solid black;
+	
+}
+
+.form-control {
+	border-radius: 0px;
+}
+
+.control-label {
+	text-align: left !important;
+	font-size: 12px;
+}
+
+.table-striped-react > tbody > tr:nth-child(even) > td, .table-striped > tbody > tr:nth-child(even) > th {
+   background-color: rgb(249, 249, 249);
+}
+
+.table>tbody>tr>th {
+	border-top: 0px; 
+}
+
+.table-price {
+	text-align: right;
+	font-weight: 500;
+}
+
+.price-column {
+	text-align: right;
+}
+
+.check-column {
+	text-align: center;
+}
+
+.table-check {
+	text-align: center;
+}
+
+.table-domain {
+	color: rgb(58, 123, 69);
+}
+
+
+

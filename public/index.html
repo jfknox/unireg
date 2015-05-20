@@ -2,13 +2,14 @@
 <html>
   <head>
     <title>Uniregistry</title>
-    <link rel="stylesheet" href="base.css" />
+    
     <link rel="stylesheet" href="../dependencies/bootstrap.min.css" />
+    <link rel="stylesheet" href="../dependencies/">
     <script src="../dependencies/react.js"></script>
     <script src="../dependencies/JSXTransformer.js"></script>
     <script src="../dependencies/jquery.min.js"></script>
     <script src="../dependencies/underscore-min.js"></script>
-
+    <link rel="stylesheet" href="base.css" />
   </head>
   <body>
  
@@ -16,7 +17,7 @@
 
 
     <div id="container">
-        <!-- This element's contents will be replaced with your component. -->
+        
     </div>
     
 
@@ -51,13 +52,13 @@
             );
           });
           return (
-            <div className="domanTable">
-              <h1>Table</h1>
-              <table>
+            <div className="domainTable col-sm-offset-2 col-sm-8">
+          
+              <table className="table table-striped-react">
                 <tr>
-                  <th>Domain Name</th>
-                  <th>Uniregistry</th> 
-                  <th>Price</th>
+                  <th className="domain-column">Domain Name</th>
+                  <th className="check-column">Uniregistry</th> 
+                  <th className="price-column">Price</th>
                 </tr>
                 {RowList}
               </table>
@@ -83,9 +84,9 @@
         }
           return (
             <tr>
-              <td onClick={this.editModal}> {this.props.domain}</td>
-              <td> {check} </td>
-              <td> ${(this.props.price/100).toFixed(2)}</td>
+              <td className="table-domain" onClick={this.editModal}> {this.props.domain}</td>
+              <td className="table-check"> {check} </td>
+              <td className="table-price"> ${(this.props.price/100).toFixed(2)}</td>
             </tr>
           );
         }
@@ -93,33 +94,45 @@
 
       var DomainDetail = React.createClass({
         getInitialState: function() {
-          return {domain: this.props.domain, email: this.props.email, price: this.props.price};
+          return {domain: this.props.domain, email: this.props.email, price: (this.props.price/100).toFixed(2)};
         },
         handleChange: function(event) {
-            var data = {}
-            data[event.target.name] = event.target.value
-            this.setState(data);
+          var data = {}
+          data[event.target.name] = event.target.value
+          this.setState(data);
 
         },
-
         render: function () {
 
           return(
-            <div>
-              <form>
-                Domain name
-                <input type="text" name="domain" value={this.state.domain} onChange={this.handleChange}/>
-                <br/>
-                Registration Email
-                <input type="text" name="email" value={this.state.email} onChange={this.handleChange}/>
-                <br/>
-                Price
-                <input type="text" name="price" value={this.state.price} onChange={this.handleChange}/>
-                
+            <div className="domainForm col-sm-offset-2 col-sm-8">
+              <form className="form-horizontal">
 
-                <br/>
+                <div className="form-group">
+                  <label for="domain-form" className="col-xs-3 control-label">Domain name</label>
+                  <div className="col-xs-9">
+                    <input type="text" className="form-control" id="domain-form" name="domain" value={this.state.domain} onChange={this.handleChange}/>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label for="email-form" className="col-xs-3 control-label">Registran Email</label>
+                  <div className="col-xs-9">
+                    <input type="text" className="form-control" id="email-form" name="email" value={this.state.email} onChange={this.handleChange}/>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label for="price-form" className="col-xs-3 control-label">Price</label>
+                  <div className="col-xs-9">
+                    <input type="text" className="form-control" id="price-form" name="price" value={this.state.price} onChange={this.handleChange}/>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="col-xs-offset-3 col-xs-9">
+                    <button type="submit" className="btn btn-default save-button">Save changes</button>
+                  </div>
+                </div>
 
-                <input type="submit" value="Save Changes"/>
+               
               </form>
             </div>
           )
