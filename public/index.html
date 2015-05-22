@@ -21,21 +21,44 @@
 
 
 
-    <div id="container">
-        
-    </div>
+    <div id="container"></div>
+
+    <div id="form-container"></div>
     
 
 
     <script type="text/jsx">
       
-      var data = new Firebase("https://uniregistry.firebaseio.com/");  
 
       var DomainTable = React.createClass({
+        mixins: [ReactFireMixin],
+        getInitialState: function() {
+          return {data: {}};
+        },
+        componentWillMount: function() {
+          $(document).on("save", function(event, state_data){
+
+            this.firebaseRefs["data"].child('domains').transaction(function(domains) {
+              _.each(domains, function(domain) {
+                if (domain.id == state_data.id){
+                  domain.registrant_email = state_data.email
+                  domain.price = parseInt(state_data.price * 100)
+                  console.log(domain.price)
+                  domain.domain = state_data.domain 
+                }
+              })
+              return domains
+            })
+
+          }.bind(this));
+          fire_data = new Firebase("https://uniregistry.firebaseio.com/")
+          this.bindAsObject(fire_data, "data");
+        },
         render: function() {
-          var RowList = _.map(this.props.data.domains, function (domainObject) {
+          console.log(this.state)
+          var RowList = _.map(this.state.data.domains, function (domainObject) {
             return (
-              <Row domain={domainObject.domain} price={domainObject.price} email={domainObject.registrant_email}> 
+              <Row domain={domainObject.domain} price={domainObject.price} email={domainObject.registrant_email} id={domainObject.id}> 
               </Row>
             );
           });
@@ -58,9 +81,11 @@
       var Row = React.createClass({
         editModal: function() {
           React.render(
-            <DomainDetail email={this.props.email} domain={this.props.domain} price={this.props.price} />,
-            document.getElementById('container')
+            <DomainDetail email={this.props.email} domain={this.props.domain} price={this.props.price} id={this.props.id}/>,
+            document.getElementById('form-container')
           );
+        $('#container').hide();
+        $('#form-container').show();
         },
         render: function() {
         function endsWith(string, suffix) {
@@ -72,7 +97,7 @@
         }
           return (
             <tr>
-              <td className="table-domain" onClick={this.editModal}> {this.props.domain}</td>
+              <td className="table-domain" onClick={this.editModal} > {this.props.domain}</td>
               <td className="table-check"> {check} </td>
               <td className="table-price"> ${(this.props.price/100).toFixed(2)}</td>
             </tr>
@@ -81,15 +106,27 @@
       });
 
       var DomainDetail = React.createClass({
-    
         getInitialState: function() {
-          return {domain: this.props.domain, email: this.props.email, price: (this.props.price/100).toFixed(2)};
+          return {domain: this.props.domain, id: this.props.id, email: this.props.email, price: (this.props.price/100).toFixed(2)};
+        },
+        componentWillReceiveProps: function(nextProps) {
+          this.setState( {
+            domain: nextProps.domain, email: nextProps.email, id: nextProps.id, price: (nextProps.price/100).toFixed(2)
+          }
+
+          );
         },
         handleChange: function(event) {
           var data = {}
           data[event.target.name] = event.target.value
           this.setState(data);
 
+        },
+        hideAndShowAndTrigger: function(event) {
+          $('#form-container').hide();
+          $('#container').show();
+          event.preventDefault();
+          $(document).trigger("save", this.state)
         },
 
         render: function () {
@@ -118,7 +155,7 @@
                 </div>
                 <div className="form-group">
                   <div className="col-xs-offset-3 col-xs-9">
-                    <button type="submit" className="btn btn-default save-button">Save changes</button>
+                    <button type="submit" onClick={this.hideAndShowAndTrigger} className="btn btn-default save-button">Save changes</button>
                   </div>
                 </div>
 
@@ -130,15 +167,12 @@
  
       })
 
-      data.on("value", function(snapshot) {
-        data = snapshot.val();
         React.render(
-          <DomainTable data={data} />,
+          <DomainTable />,
           document.getElementById('container')
         );
-      });
 
-    
+
 
 
 
