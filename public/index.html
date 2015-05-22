@@ -43,7 +43,6 @@
                 if (domain.id == state_data.id){
                   domain.registrant_email = state_data.email
                   domain.price = parseInt(state_data.price * 100)
-                  console.log(domain.price)
                   domain.domain = state_data.domain 
                 }
               })
@@ -55,10 +54,9 @@
           this.bindAsObject(fire_data, "data");
         },
         render: function() {
-          console.log(this.state)
-          var RowList = _.map(this.state.data.domains, function (domainObject) {
+          var RowList = _.map(this.state.data.domains, function (domainObject, index) {
             return (
-              <Row domain={domainObject.domain} price={domainObject.price} email={domainObject.registrant_email} id={domainObject.id}> 
+              <Row key={index} domain={domainObject.domain} price={domainObject.price} email={domainObject.registrant_email} id={domainObject.id}> 
               </Row>
             );
           });
@@ -136,19 +134,19 @@
               <form className="form-horizontal">
 
                 <div className="form-group">
-                  <label for="domain-form" className="col-xs-3 control-label">Domain name</label>
+                  <label htmlFor="domain-form" className="col-xs-3 control-label">Domain name</label>
                   <div className="col-xs-9">
                     <input type="text" className="form-control" id="domain-form" name="domain" value={this.state.domain} onChange={this.handleChange}/>
                   </div>
                 </div>
                 <div className="form-group">
-                  <label for="email-form" className="col-xs-3 control-label">Registran Email</label>
+                  <label htmlFor="email-form" className="col-xs-3 control-label">Registran Email</label>
                   <div className="col-xs-9">
                     <input type="text" className="form-control" id="email-form" name="email" value={this.state.email} onChange={this.handleChange}/>
                   </div>
                 </div>
                 <div className="form-group">
-                  <label for="price-form" className="col-xs-3 control-label">Price</label>
+                  <label htmlFor="price-form" className="col-xs-3 control-label">Price</label>
                   <div className="col-xs-9">
                     <input type="text" className="form-control" id="price-form" name="price" value={this.state.price} onChange={this.handleChange}/>
                   </div>
