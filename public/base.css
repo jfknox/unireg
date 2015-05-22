@@ -61,7 +61,16 @@
 
 .table-domain {
 	color: rgb(58, 123, 69);
+	cursor: pointer;
+	font-weight: 500;
 }
 
+i {
+	color: rgb(58, 123, 69);
+}
+
+.table-domain:hover {
+	text-decoration: underline;
+}
 
 

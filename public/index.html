@@ -4,11 +4,16 @@
     <title>Uniregistry</title>
     
     <link rel="stylesheet" href="../dependencies/bootstrap.min.css" />
-    <link rel="stylesheet" href="../dependencies/">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <script src="../dependencies/react.js"></script>
     <script src="../dependencies/JSXTransformer.js"></script>
     <script src="../dependencies/jquery.min.js"></script>
     <script src="../dependencies/underscore-min.js"></script>
+    <!-- Firebase -->
+    <script src="https://cdn.firebase.com/js/client/2.0.1/firebase.js"></script>
+
+    <!-- ReactFire -->
+    <script src="https://cdn.firebase.com/libs/reactfire/0.4.0/reactfire.min.js"></script>    <script src="scripts.js"></script>
     <link rel="stylesheet" href="base.css" />
   </head>
   <body>
@@ -24,24 +29,7 @@
 
     <script type="text/jsx">
       
-      var data = { "domains": [{
-          "id": 1,
-          "domain": "foodfighters.lol",
-          "price": 1200, 
-          "registrant_email": "john.smith@email.com"
-        }, {
-          "id": 2,
-          "domain": "greendiamondsky.com",
-          "price": 900, 
-          "registrant_email": "admin@dealdomainer.com"
-        }, {
-          "id": 1,
-          "domain": "selfdriving.cars",
-          "price": 1600, 
-          "registrant_email": "carl.sagan@aimotors.com"
-        }]
-      }
-
+      var data = new Firebase("https://uniregistry.firebaseio.com/");  
 
       var DomainTable = React.createClass({
         render: function() {
@@ -56,7 +44,7 @@
           
               <table className="table table-striped-react">
                 <tr>
-                  <th className="domain-column">Domain Name</th>
+                  <th className="domain-column">Domain name</th>
                   <th className="check-column">Uniregistry</th> 
                   <th className="price-column">Price</th>
                 </tr>
@@ -80,7 +68,7 @@
         }
         var check = ""
         if (endsWith(this.props.domain, ".lol") || endsWith(this.props.domain, ".cars")){
-          check = "yes"
+          check = <i className="fa fa-check"></i>
         }
           return (
             <tr>
@@ -93,6 +81,7 @@
       });
 
       var DomainDetail = React.createClass({
+    
         getInitialState: function() {
           return {domain: this.props.domain, email: this.props.email, price: (this.props.price/100).toFixed(2)};
         },
@@ -102,6 +91,7 @@
           this.setState(data);
 
         },
+
         render: function () {
 
           return(
@@ -140,13 +130,15 @@
  
       })
 
+      data.on("value", function(snapshot) {
+        data = snapshot.val();
+        React.render(
+          <DomainTable data={data} />,
+          document.getElementById('container')
+        );
+      });
 
-
-      React.render(
-        <DomainTable data={data} />,
-        document.getElementById('container')
-      );
-
+    
 
 
 
